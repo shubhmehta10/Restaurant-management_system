@@ -1,69 +1,66 @@
-# ____________________________________importing all the required libraries
 from tkinter import *
-import pandas as pd
 import tkinter.ttk as ttk
 
 
-# ___________________________________________________function for the Confirm Button for finishing Order
 def confirm(*args):
     pass
 
-# _______________________________________________function for Refresh Button to Display Orders with status update
+
 def refresh():
     pass
 
 
-# ________________________________________________function to cancel an order
 def cancel():
     pass
 
 
-# ___________________________________________Start of Mainloop GUI
+def home():
+    pass
 
-tab_n = [1, 2, 3, 4, 5, 6]  # LIST OF TABLE NUMBERS
+tab_n = [1, 2, 3, 4]
 root = Tk()
-root.title("Python Project (Restaurant Ordering System)")  # ____Header Title
+root.title("KITCHEN")
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()  # Width and height according to users PC
 t = h - 100
 
-# ________________________________________________________Main Window
 root.geometry("%dx%d+0+0" % (w, h))
 root.state('zoomed')
 root.configure(bg='black')
 root.resizable(0, 0)
 
-# __________________________________________________Title of Main Window
+# Title of Main Window
 title = Frame(root, width=w, bd=15, height=100, relief='ridge', bg='grey')
 title.pack(side=TOP)
 title.pack_propagate(0)
 title_label = Label(title, font=('Algerian', 60, 'bold'), bg='grey', text="KITCHEN", justify=CENTER)
 title_label.pack(padx=50)
 
-# __________________________________________________Left Partition
+# Left Partition
 left = Frame(root, width=3 / 4 * w, height=t, bd=15, relief='ridge', bg='grey')
 left.pack(side=LEFT)
 left.pack_propagate(0)
 
-# __________________________________________________Right Partition
+# Right Partition
 right = Frame(root, width=w / 4, height=t, bd=15, relief='ridge', bg='grey')
 right.pack(side=RIGHT)
 right.pack_propagate(0)
 
-# ____________________________________________________Frame and Label for pending orders
+# Frame and Label for pending orders
 pending_frame = Frame(left, width=3 / 4 * w, height=90, bd=18, relief='ridge', bg='grey')
 pending_frame.pack(side=TOP)
 pending_frame.pack_propagate(0)
 Label(pending_frame, text="Pending Orders:", font=('algerian', 35, 'bold'), bg='grey', justify=CENTER).pack()
 
-# _____________________________________________________Frame for menu
+# Frame for menu
 menu = Frame(left, width=3 / 4 * w, height=t - 90, bd=15, relief='raised', bg='grey')
 menu.pack(side=BOTTOM)
 menu.grid_propagate(0)
 menu.pack_propagate(0)
 
-# _______________________________________________Display window for Orders
+# Display window for Orders
 style = ttk.Style()
-style.configure("Treeview", highlightthickness=0, bd=10, font=('Garamond', 21, 'bold'),rowheight=45)  # Modify the font of the body
+style.configure("Treeview", highlightthickness=0, bd=10, font=('Garamond', 21, 'bold'),
+                rowheight=45)  # Modify the font of the body
 style.configure("Treeview.Heading", font=('Times New Roman', 25, 'bold'))
 kitchen = ttk.Treeview(menu, columns=("Index", "Table", "Order", "Qty", "Status"), height=29, selectmode='browse')
 kitchen["displaycolumns"] = ("Table", "Order", "Qty", "Status")  # ________________HIDES INDEX COLUMN
@@ -80,35 +77,33 @@ kitchen.heading("2", text="Order")
 kitchen.heading("3", text="Qty")
 kitchen.heading("4", text="Status")
 
-# ______________________________________________________Right Window GUI
+# Right Window GUI
 right_frame = Frame(right, width=w / 2, height=t, bd=15, relief='raised', bg='grey')
 right_frame.pack(side=RIGHT)
 right_frame.pack_propagate(0)
 
-# ______________________________________________________Done Button GUI
+# Done Button GUI
 done_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
-done_button_frame.pack(side=TOP, pady=100)
-done = Button(done_button_frame, text="Done", width=20, height=1, font=('Arial', 20, 'bold'), command=confirm)
+done_button_frame.pack(side=TOP, pady=50)
+done = Button(done_button_frame, text="DONE", width=20, height=1, font=('Arial', 20, 'bold'), command=confirm)
 done.pack()
 
-# ______________________________________________________Refresh Button GUI
+# Refresh Button GUI
 refresh_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
-refresh_button_frame.pack(side=TOP, pady=50)
-refresh_button = Button(refresh_button_frame, text="Refresh", width=20, height=1, font=('Arial', 20, 'bold'),
-                        command=refresh)
+refresh_button_frame.pack(side=TOP, pady=30)
+refresh_button = Button(refresh_button_frame, text="REFRESH", width=20, height=1, font=('Arial', 20, 'bold'),command=refresh)
 refresh_button.pack()
 
-# ______________________________________________________Cancel Button GUI
-cancel_button_frame = Frame(right_frame, width=w / 4, height=20, bd=10, relief='sunken', bg='grey')
-cancel_button_frame.pack(side=BOTTOM, pady=80)
-cancel = Button(cancel_button_frame, text="Cancel Order", font=('Arial', 20, 'bold'), width=20, height=1,
-                command=cancel)
-cancel.pack()
+# Home Button GUI
+home_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
+home_button_frame.pack(side=BOTTOM, pady=50)
+home_button = Button(home_button_frame, text="HOME", width=20, height=1, font=('Arial', 20, 'bold'),command=home)
+home_button.pack()
 
-# # _______________________________________________________FILE Reading for Orders:
-# df_dish = pd.read_csv("CSV\\Kitchen.csv")  # _____________________________________________________File loc here
-# for i in range(len(df_dish["order"])):
-#     kitchen.insert(parent='', index='end', values=(i, df_dish["table"][i], df_dish["order"][i], df_dish["qty"][i],
-#                                                    df_dish["status"][i]))  # inserting values to treeview
+# Cancel Button GUI
+cancel_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
+cancel_button_frame.pack(side=BOTTOM, pady=50)
+cancel_button = Button(cancel_button_frame, text="CANCEL ORDER", width=20, height=1, font=('Arial', 20, 'bold'),command=cancel)
+cancel_button.pack()
 
-root.mainloop()  # _____________Keeps the root window in loop
+root.mainloop()
