@@ -3,17 +3,140 @@ from tkinter import *
 import pandas as pd
 from PIL import Image, ImageTk
 
+
+def scrollwheel(event):
+    return 'break'
+
+
+def onscroll(axis, *args):
+    global Tqty,Tstat,Torder
+    Tqty.yview(*args)
+    Torder.yview(*args)
+    Tstat.yview(*args)
+
+
+def change_table(*args):
+    #Changing state of textbox for editing
+    Torder.configure(state='normal')
+    Tstat.configure(state='normal')
+    Tqty.configure(state='normal')
+    df_orders=pd.read_csv("CSV\\Kitchen.csv") #__________________________________________FILE LOC HERE
+    #Dropping orders of tables other than the selected table
+    for n in range(len(df_orders["order"])):
+        if int(df_orders["table"][n]) != int(table.get()):
+            df_orders.drop(n, inplace = True)
+    df_orders.drop(["table"], axis = 1, inplace = True)
+    #Clearing Textboxes of previous values
+    Torder.delete('1.0',END)
+    Tqty.delete('1.0',END)
+    Tstat.delete('1.0',END)
+    #Inserting current table's orders to textboxes
+    Torder.insert('end',"ORDERS" +"\n")
+    Tqty.insert('end',"QTY" + "\n")
+    Tstat.insert('end',"STATUS" + "\n")
+    for i in range(len(df_orders["order"])):
+        Torder.insert('end',df_orders["order"].tolist()[i] +"\n")
+        Tqty.insert('end',str(df_orders["qty"].tolist()[i]) + "\n")
+        Tstat.insert('end', str(df_orders["status"].tolist()[i]) + "\n")
+    # Changing state of textbox to stop editing once orders are entered
+    Torder.configure(state='disabled')
+    Tstat.configure(state='disabled')
+    Tqty.configure(state='disabled')
+    global b_add
+    b_add = False
+
+
 def order():
-    pass
+    if b_add == False:
+        no_order()
+        return
+    qty = Tqty.get("1.0", "end-1c").split("\n")
+    while ("" in qty):
+        qty.remove("")
+    if len(qty[1:]) != len(to_kitchen["qty"].tolist()):
+        confirm_frame = Toplevel(relief='ridge', bd=20, bg='grey')
+        confirm_frame.title("Invalid Quantities")
+        confirm_frame.geometry("650x100+550+400")
+        confirm_frame.resizable(0, 0)
+        confirm_label = Label(confirm_frame, text="===== Invalid Quantity for Dish!!! =====",
+                              font=('Arial', 18, 'bold'), bd=10, relief='groove', pady=20)
+        confirm_label.pack()
+        return
+    to_kitchen["qty"] = qty[1:]
+    for i in range(len(to_kitchen["qty"].tolist())):
+        if int(to_kitchen["qty"][i]) < 1:
+            to_kitchen.drop(i, inplace=True)
+    to_kitchen.to_csv("CSV\\Kitchen.csv", mode='a', header=False, index=False)  # ___________FILE LOC HERE
+    change_table()
+    confirm()
+
 
 def add():
-    pass
+    x = []
+    y = []
+    b = True
+    sel_order1 = [str(box1.get(idx)) for idx in box1.curselection()]
+    #Seperating SELECTED Order and Price from Listbox into 2 lists
+    for j in sel_order1:
+        l = j.split(sep=":      Rs.")
+        for s in l:
+            if b == True:
+                x.append(s)
+                b = False
+            else:
+                y.append(s)
+                b = True
+    global to_kitchen
+    to_kitchen = pd.DataFrame()
+    to_kitchen["order"],to_kitchen["price"],to_kitchen["qty"],to_kitchen["status"],to_kitchen["table"] = x,y,1,"False",int(table.get())
+    to_kitchen = to_kitchen[["table","order","qty","price","status"]]
+
+    #Changing state of textbox for editing
+    Torder.configure(state='normal')
+    Tstat.configure(state='normal')
+    Tqty.configure(state='normal')
+    #Clearing Textboxes of previous values
+    Torder.delete('1.0',END)
+    Tqty.delete('1.0',END)
+    Tstat.delete('1.0',END)
+    # ____________Inserting added items to textboxes
+    Torder.insert('end',"ORDERING NOW" +"\n")
+    Tqty.insert('end',"QTY" + "\n")
+    Tstat.insert('end',"STATUS" + "\n")
+    for i in range(len(to_kitchen["order"])):
+        Torder.insert('end',to_kitchen["order"].tolist()[i] +"\n")
+        Tqty.insert('end',str(to_kitchen["qty"].tolist()[i]) + "\n")
+        Tstat.insert('end', str(to_kitchen["status"].tolist()[i]) + "\n")
+    #Changing state of textbox to stop editing once orders are entered
+    Torder.configure(state='disabled')
+    Tstat.configure(state='disabled')
+    global b_add
+    b_add = True
+
 
 def clear():
-    pass
+    box1.selection_clear(0, END)
+    change_table()
+
 
 def home():
     pass
+
+def confirm(*args):
+    confirm_frame = Toplevel(relief='ridge', bd=20, bg='grey')
+    confirm_frame.title("Order Confirmation")
+    confirm_frame.geometry("650x100+550+400")
+    confirm_frame.resizable(0, 0)
+    confirm_label = Label(confirm_frame, text="===== Your order has been placed =====", font=('Arial', 18, 'bold'), bd=10, relief='groove',pady=20)
+    confirm_label.pack()
+
+def no_order(*args):
+    no_order_frame = Toplevel(relief='ridge', bd=20, bg='grey')
+    no_order_frame.title("Order Confirmation")
+    no_order_frame.geometry("650x100+550+400")
+    no_order_frame.resizable(0, 0)
+    no_order_label = Label(no_order_frame, text="===== No new orders added!!! =====", font=('Arial', 18, 'bold'), bd=10, relief='groove',pady=20)
+    no_order_label.pack()
 
 #table number button
 tab_n = [1, 2, 3, 4]
