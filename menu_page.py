@@ -2,75 +2,20 @@ import tkinter
 from tkinter import *
 import pandas as pd
 from PIL import Image, ImageTk
+import os
 
 
 def scrollwheel(event):
     return 'break'
 
-
+#______________________________function for scrollbar
 def onscroll(axis, *args):
     global Tqty,Tstat,Torder
     Tqty.yview(*args)
     Torder.yview(*args)
     Tstat.yview(*args)
 
-
-def change_table(*args):
-    #Changing state of textbox for editing
-    Torder.configure(state='normal')
-    Tstat.configure(state='normal')
-    Tqty.configure(state='normal')
-    df_orders=pd.read_csv("CSV\\Kitchen.csv") #__________________________________________FILE LOC HERE
-    #Dropping orders of tables other than the selected table
-    for n in range(len(df_orders["order"])):
-        if int(df_orders["table"][n]) != int(table.get()):
-            df_orders.drop(n, inplace = True)
-    df_orders.drop(["table"], axis = 1, inplace = True)
-    #Clearing Textboxes of previous values
-    Torder.delete('1.0',END)
-    Tqty.delete('1.0',END)
-    Tstat.delete('1.0',END)
-    #Inserting current table's orders to textboxes
-    Torder.insert('end',"ORDERS" +"\n")
-    Tqty.insert('end',"QTY" + "\n")
-    Tstat.insert('end',"STATUS" + "\n")
-    for i in range(len(df_orders["order"])):
-        Torder.insert('end',df_orders["order"].tolist()[i] +"\n")
-        Tqty.insert('end',str(df_orders["qty"].tolist()[i]) + "\n")
-        Tstat.insert('end', str(df_orders["status"].tolist()[i]) + "\n")
-    # Changing state of textbox to stop editing once orders are entered
-    Torder.configure(state='disabled')
-    Tstat.configure(state='disabled')
-    Tqty.configure(state='disabled')
-    global b_add
-    b_add = False
-
-
-def order():
-    if b_add == False:
-        no_order()
-        return
-    qty = Tqty.get("1.0", "end-1c").split("\n")
-    while ("" in qty):
-        qty.remove("")
-    if len(qty[1:]) != len(to_kitchen["qty"].tolist()):
-        confirm_frame = Toplevel(relief='ridge', bd=20, bg='grey')
-        confirm_frame.title("Invalid Quantities")
-        confirm_frame.geometry("650x100+550+400")
-        confirm_frame.resizable(0, 0)
-        confirm_label = Label(confirm_frame, text="===== Invalid Quantity for Dish!!! =====",
-                              font=('Arial', 18, 'bold'), bd=10, relief='groove', pady=20)
-        confirm_label.pack()
-        return
-    to_kitchen["qty"] = qty[1:]
-    for i in range(len(to_kitchen["qty"].tolist())):
-        if int(to_kitchen["qty"][i]) < 1:
-            to_kitchen.drop(i, inplace=True)
-    to_kitchen.to_csv("CSV\\Kitchen.csv", mode='a', header=False, index=False)  # ___________FILE LOC HERE
-    change_table()
-    confirm()
-
-
+#________________________________Function for Add Button to add dishes
 def add():
     x = []
     y = []
@@ -113,15 +58,12 @@ def add():
     global b_add
     b_add = True
 
-
+#___________________Clearing selections
 def clear():
-    box1.selection_clear(0, END)
+    box1.selection_clear(0,END)
     change_table()
 
-
-def home():
-    pass
-
+#________________________Pop-up for order confirmation
 def confirm(*args):
     confirm_frame = Toplevel(relief='ridge', bd=20, bg='grey')
     confirm_frame.title("Order Confirmation")
@@ -130,6 +72,7 @@ def confirm(*args):
     confirm_label = Label(confirm_frame, text="===== Your order has been placed =====", font=('Arial', 18, 'bold'), bd=10, relief='groove',pady=20)
     confirm_label.pack()
 
+#________________________Pop-up for no orders
 def no_order(*args):
     no_order_frame = Toplevel(relief='ridge', bd=20, bg='grey')
     no_order_frame.title("Order Confirmation")
@@ -137,6 +80,63 @@ def no_order(*args):
     no_order_frame.resizable(0, 0)
     no_order_label = Label(no_order_frame, text="===== No new orders added!!! =====", font=('Arial', 18, 'bold'), bd=10, relief='groove',pady=20)
     no_order_label.pack()
+
+#________________________
+def order(*args):
+    if b_add == False:
+        no_order()
+        return
+    qty = Tqty.get("1.0","end-1c").split("\n")
+    while ("" in qty):
+        qty.remove("")
+    if len(qty[1:]) != len(to_kitchen["qty"].tolist()):
+        confirm_frame = Toplevel(relief='ridge', bd=20, bg='grey')
+        confirm_frame.title("Invalid Quantities")
+        confirm_frame.geometry("650x100+550+400")
+        confirm_frame.resizable(0, 0)
+        confirm_label = Label(confirm_frame, text="===== Invalid Quantity for Dish!!! =====", font=('Arial', 18, 'bold'),bd=10, relief='groove', pady=20)
+        confirm_label.pack()
+        return
+    to_kitchen["qty"] = qty[1:]
+    for i in range(len(to_kitchen["qty"].tolist())):
+            if int(to_kitchen["qty"][i]) < 1:
+                to_kitchen.drop(i, inplace = True)
+    to_kitchen.to_csv("CSV\\Kitchen.csv",mode='a',header=False,index=False)#___________FILE LOC HERE
+    change_table()
+    confirm()
+
+def change_table(*args):
+    #Changing state of textbox for editing
+    Torder.configure(state='normal')
+    Tstat.configure(state='normal')
+    Tqty.configure(state='normal')
+    df_orders=pd.read_csv("CSV\\Kitchen.csv") #__________________________________________FILE LOC HERE
+    #Dropping orders of tables other than the selected table
+    for n in range(len(df_orders["order"])):
+        if int(df_orders["table"][n]) != int(table.get()):
+            df_orders.drop(n, inplace = True)
+    df_orders.drop(["table"], axis = 1, inplace = True)
+    #Clearing Textboxes of previous values
+    Torder.delete('1.0',END)
+    Tqty.delete('1.0',END)
+    Tstat.delete('1.0',END)
+    #Inserting current table's orders to textboxes
+    Torder.insert('end',"ORDERS" +"\n")
+    Tqty.insert('end',"QTY" + "\n")
+    Tstat.insert('end',"STATUS" + "\n")
+    for i in range(len(df_orders["order"])):
+        Torder.insert('end',df_orders["order"].tolist()[i] +"\n")
+        Tqty.insert('end',str(df_orders["qty"].tolist()[i]) + "\n")
+        Tstat.insert('end', str(df_orders["status"].tolist()[i]) + "\n")
+    # Changing state of textbox to stop editing once orders are entered
+    Torder.configure(state='disabled')
+    Tstat.configure(state='disabled')
+    Tqty.configure(state='disabled')
+    global b_add
+    b_add = False
+
+def home():
+    os.system('python home_page.py')
 
 #table number button
 tab_n = [1, 2, 3, 4]
@@ -205,17 +205,18 @@ order_button_frame.pack(side=LEFT)
 order = Button(order_button_frame,text="ORDER",command=order,width=15,height=10,font=('Arial',15,'bold'))
 order.pack()
 
+#Frame and button for home
+home_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=10,relief='sunken',bg='grey')
+home_button_frame.pack(side=RIGHT)
+home = Button(home_button_frame,text="HOME",font=('Arial',15,'bold'),width=12,height=10,command=home)
+home.pack()
+
 #Frame and button for clearing selection
 clear_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=10,relief='sunken',bg='grey')
 clear_button_frame.pack(side=RIGHT)
 clear = Button(clear_button_frame,text="CLEAR SELECTION",font=('Arial',15,'bold'),width=15,height=10,command=clear)
 clear.pack()
 
-#Frame and button for home
-home_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=10,relief='sunken',bg='grey')
-home_button_frame.pack(side=RIGHT)
-home = Button(home_button_frame,text="HOME",font=('Arial',15,'bold'),width=12,height=10,command=home)
-home.pack()
 
 #Frame and button for adding items
 add_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=10,relief='sunken',bg='grey')
@@ -231,6 +232,7 @@ table_menu = OptionMenu(tab_button_frame, table, *tab_n)
 table_menu.configure(width=20,height=3,font=('Arial',15,'bold'),relief='raised',bd=10)
 Label(tab_button_frame, text="Choose Table Number : ",font=('Arial',25,'bold'), bg='grey').pack(side=LEFT)
 table_menu.pack()
+table.trace('w',change_table)
 
 
 #Listbox for Menu
@@ -245,17 +247,17 @@ yscrollbar.grid(row=0, column=4,sticky=N+S+W)
 #Textbox for orders
 Torder = Text(summary, bg='white', bd=16, height=int(t/45), width=int(m2/30),font=('Garamond',22,'bold'))
 Torder.grid(row=0, column=1)
-Torder.bind('<MouseWheel>')
+Torder.bind('<MouseWheel>',scrollwheel)
 
 #Textbox for quantity
 Tqty = Text(summary, bg='white', bd=16, height=int(t/45), width=int(m2/90),font=('Garamond',22,'bold'))
 Tqty.grid(row=0,column=2)
-Tqty.bind('<MouseWheel>')
+Tqty.bind('<MouseWheel>',scrollwheel)
 
 #Textbox for status
 Tstat = Text(summary, bg='white', bd=16, height=int(t/45), width=int(m2/75),font=('Garamond',22,'bold'))
 Tstat.grid(row=0,column=3)
-Tstat.bind('<MouseWheel>')
+Tstat.bind('<MouseWheel>',scrollwheel)
 
 #reading menu dataframe
 df_dish = pd.read_csv("CSV\\Menu.csv")
@@ -266,3 +268,5 @@ for i in range(len(df_dish["Dish"])):
      box1.insert('end',box1_el)
 
 root.mainloop()
+
+

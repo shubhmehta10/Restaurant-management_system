@@ -1,21 +1,50 @@
 from tkinter import *
 import tkinter.ttk as ttk
-
+import pandas as pd
+import os
 
 def confirm(*args):
-    pass
+    df_dish = pd.read_csv("CSV\\Kitchen.csv")                        #______________________________________________File Loc Here
+    x = kitchen.item(kitchen.selection())['values'][0]
+    df_dish.loc[x,"status"] = True
+    df_dish.to_csv("CSV\\Kitchen.csv", index=False)
+
+#_________________________________________Order Confirmation
+    confirm_frame = Toplevel(relief='ridge', bd=20, bg='grey')
+    confirm_frame.title("Billing Confirmation")
+    confirm_frame.geometry("650x100+600+400")
+    confirm_label = Label(confirm_frame, text="===== Order is ready to be served =====", font=('Arial', 20, 'bold'), bd=15, relief='groove',pady=5)
+    confirm_label.pack()
+    refresh()
 
 
 def refresh():
-    pass
+    kitchen.delete(*kitchen.get_children())
+    df_dish = pd.read_csv("CSV\\Kitchen.csv")  # ________________________________________________________________________File Loc Here
+    for i in range(len(df_dish["order"])):
+        kitchen.insert(parent='', index='end', values=(i, df_dish["table"][i], df_dish["order"][i], df_dish["qty"][i],
+                                                       df_dish["status"][i]))  # inserting new values to treeview
 
 
 def cancel():
-    pass
+    df_dish = pd.read_csv("CSV\\Kitchen.csv")  # ______________________________________________File Loc Here
+    x = kitchen.item(kitchen.selection())['values'][0]
+
+    df_dish.drop(x, inplace=True)
+    df_dish.to_csv("CSV\\Kitchen.csv", index=False)  # ______________________________________________File Loc Here
+
+    # __________________________________________________________________Order cancellation
+    cancel_win_frame = Toplevel(relief='ridge', bd=20, bg='grey')
+    cancel_win_frame.title("Billing Confirmation")
+    cancel_win_frame.geometry("650x100+600+400")
+    cancel_win_label = Label(cancel_win_frame, text="===== Order is Cancelled =====", font=('Arial', 20, 'bold'), bd=15,
+                             relief='groove', pady=5)
+    cancel_win_label.pack()
+    refresh()
 
 
 def home():
-    pass
+    os.system('python home_page.py')
 
 tab_n = [1, 2, 3, 4]
 root = Tk()
@@ -29,11 +58,11 @@ root.configure(bg='black')
 root.resizable(0, 0)
 
 # Title of Main Window
-title = Frame(root, width=w, bd=15, height=100, relief='ridge', bg='grey')
+title = Frame(root, width=w, bd=15, height=170, relief='ridge', bg='grey')
 title.pack(side=TOP)
 title.pack_propagate(0)
 title_label = Label(title, font=('Algerian', 60, 'bold'), bg='grey', text="KITCHEN", justify=CENTER)
-title_label.pack(padx=50)
+title_label.pack(pady=20)
 
 # Left Partition
 left = Frame(root, width=3 / 4 * w, height=t, bd=15, relief='ridge', bg='grey')
@@ -102,7 +131,7 @@ home_button.pack()
 
 # Cancel Button GUI
 cancel_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
-cancel_button_frame.pack(side=BOTTOM, pady=50)
+cancel_button_frame.pack(side=BOTTOM, pady=20)
 cancel_button = Button(cancel_button_frame, text="CANCEL ORDER", width=20, height=1, font=('Arial', 20, 'bold'),command=cancel)
 cancel_button.pack()
 
