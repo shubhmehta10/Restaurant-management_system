@@ -105,15 +105,15 @@ root = Tk()
 root.title("CHECKOUT")  # ____Header Title
 root.resizable(0, 0)  # Disabling Resizing of window
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()  # Width and height according to users PC
-root.geometry("200x200+400+300")  # Defining Window Geometry
+root.geometry("300x300")  # Defining Window Geometry
 
-tab_no = [1, 2, 3, 4, 5, 6]  # __________________LIST OF TABLE NUMBERS
+tab_no = [1, 2, 3, 4]  # __________________LIST OF TABLE NUMBERS
 
 # Bill Window Frame
-mainframe = Frame(root, width=200, bd=15, height=200, relief='ridge', bg='grey')
+mainframe = Frame(root, width=300, bd=15, height=300, relief='ridge', bg='grey')
 mainframe.pack()
 mainframe.pack_propagate(0)
-mainframe_label = Label(mainframe, font=('Algerian', 20, 'bold'), bg='grey', text="Check Out", justify=CENTER)
+mainframe_label = Label(mainframe, font=('Algerian', 20, 'bold'), bg='white', text="Check Out", justify=CENTER)
 mainframe_label.pack(pady=20)
 
 # _____________________________Selected Table number call is "table.get()"__________________________#
@@ -122,10 +122,10 @@ table = StringVar(root)
 # _____________________Option Menu to select Table number
 table.set('Table Number')  # set the default option to 1
 popupMenu = OptionMenu(mainframe, table, *tab_no)
-popupMenu.configure(bd=3, font=('Arial', 12, 'bold'))
-popupMenu.pack()
+popupMenu.configure(bd=3, font=('Arial', 15, 'bold'))
+popupMenu.pack(pady=30)
 
 # CHECKOUT Button
 button = Button(mainframe, text="Print Bill", command=button_bill, font=('Arial', 12, 'bold'), bd=5)
-button.pack(side=BOTTOM)
+button.pack(side=BOTTOM,pady=30)
 root.mainloop()  # _____________Keeps the root window in loop
