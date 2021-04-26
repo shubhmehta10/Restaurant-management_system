@@ -15,7 +15,7 @@ def checkout():
 
 
 root = Tk()
-root.title("FOOD ORDERING SYSTEM")
+root.title("RESTAURANT MANAGEMENT SYSTEM")
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()  # Width and height according to users PC
 t = h - 100
 
@@ -28,7 +28,7 @@ root.resizable(0, 0)
 title = Frame(root, width=w, bd=15, height=170, relief='ridge', bg='grey')
 title.pack(side=TOP)
 title.pack_propagate(0)
-title_label = Label(title, font=('Algerian', 60, 'bold'), bg='grey', text="FOOD ORDERING SYSTEM", justify=CENTER)
+title_label = Label(title, font=('Algerian', 60, 'bold'), bg='white', text="RESTAURANT MANAGEMENT SYSTEM", justify=CENTER)
 title_label.pack(pady=20)
 
 #frame
@@ -54,19 +54,19 @@ button_frame.pack(side=BOTTOM,fill=Y)
 #Menu Button GUI
 menu_button_frame = Frame(button_frame, width=w, height=1, bd=10, relief='sunken', bg='grey')
 menu_button_frame.pack(side=LEFT)
-menu_button = Button(menu_button_frame, text="MENU", width=30, height=1, font=('Arial', 20, 'bold'), command=menu)
+menu_button = Button(menu_button_frame, text="MENU", width=27, height=1, font=('Arial', 20, 'bold'), command=menu)
 menu_button.pack()
 
 # Kitchen Button GUI
 kitchen_button_frame = Frame(button_frame, width=w, height=1, bd=10, relief='sunken', bg='grey')
 kitchen_button_frame.pack(side=LEFT)
-kitchen_button = Button(kitchen_button_frame, text="KITCHEN", width=30, height=1, font=('Arial', 20, 'bold'),command=kitchen)
+kitchen_button = Button(kitchen_button_frame, text="KITCHEN", width=28, height=1, font=('Arial', 20, 'bold'),command=kitchen)
 kitchen_button.pack()
 
 # checkout Button GUI
 checkout_button_frame = Frame(button_frame, width=w, height=1, bd=10, relief='sunken', bg='grey')
 checkout_button_frame.pack(side=RIGHT)
-checkout_button = Button(checkout_button_frame, text="CHECKOUT", width=30, height=1, font=('Arial', 20, 'bold'),command=checkout)
+checkout_button = Button(checkout_button_frame, text="CHECKOUT", width=27, height=1, font=('Arial', 20, 'bold'),command=checkout)
 checkout_button.pack()
 
 

@@ -138,6 +138,9 @@ def change_table(*args):
 def home():
     os.system('python home_page.py')
 
+def kitchen():
+    os.system("python kitchen_page.py")
+
 #table number button
 tab_n = [1, 2, 3, 4]
 root = Tk()
@@ -163,17 +166,21 @@ root.resizable(0, 0)
 #Frame and Label for Title
 title = Frame(root, width=w, bd=15, height=170, relief='ridge', bg='grey')
 title.pack(side=TOP)
-title_label = Label(title, font=('Algerian', 60, 'bold'), bg='grey', text="MENU", justify=CENTER)
+title_label = Label(title, font=('Algerian', 60, 'bold'), bg='white', text="MENU", justify=CENTER)
 title_label.pack(pady=20)
 title.pack_propagate(0)
 
+frame1 = Frame(root, width= w, height =580, relief='ridge', bg='grey', bd=15)
+frame1.pack()
+frame1.pack_propagate(0)
+
 #Left Partition
-left = Frame(root, width=w/2, height=t, bd=15, relief='ridge', bg='grey')
+left = Frame(frame1, width=w/2, height=580, bd=15, relief='ridge', bg='grey')
 left.pack(side=LEFT)
 left.pack_propagate(0)
 
 #Right Partition
-right = Frame(root, width=w/2, height=t, bd=15, relief='ridge', bg='grey')
+right = Frame(frame1, width=w/2, height=580, bd=15, relief='ridge', bg='grey')
 right.pack(side=RIGHT)
 right.pack_propagate(0)
 
@@ -189,39 +196,44 @@ menu.grid_propagate(0)
 menu.pack_propagate(0)
 
 #Frame for order summary
-summary = Frame(right, width=w/2, height=t-140,bd=15,relief='raised',bg='grey')
+summary = Frame(right, width=w/2, height=t-120,bd=15,relief='raised',bg='grey')
 summary.pack(side=TOP)
 summary.pack_propagate(0)
 summary.grid_propagate(0)
 
 #Frame for buttons
-bottom_frame = Frame(right,width=w/2,height=100, bd=12, relief='raised', bg='grey')
+bottom_frame = Frame(root,width=w,height=100, bd=12, relief='ridge', bg='grey')
 bottom_frame.pack(side=BOTTOM)
 bottom_frame.pack_propagate(0)
 
 #Frame and button for ordering items
-order_button_frame = Frame(bottom_frame,width=w/4,height=90,bd=10,relief='sunken',bg='grey')
+order_button_frame = Frame(bottom_frame,width=w,height=90,bd=8,relief='sunken',bg='grey')
 order_button_frame.pack(side=LEFT)
-order = Button(order_button_frame,text="ORDER",command=order,width=15,height=10,font=('Arial',15,'bold'))
+order = Button(order_button_frame,text="ORDER",command=order,width=23,height=10,font=('Arial',15,'bold'))
 order.pack()
 
 #Frame and button for home
-home_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=10,relief='sunken',bg='grey')
+home_button_frame = Frame(bottom_frame,width=w,height=1,bd=8,relief='sunken',bg='grey')
 home_button_frame.pack(side=RIGHT)
-home = Button(home_button_frame,text="HOME",font=('Arial',15,'bold'),width=12,height=10,command=home)
+home = Button(home_button_frame,text="HOME",font=('Arial',15,'bold'),width=23,height=10,command=home)
 home.pack()
 
+#Frame and button for adding items
+add_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=8,relief='sunken',bg='grey')
+add_button_frame.pack(side=LEFT)
+add = Button(add_button_frame,text="ADD",font=('Arial',15,'bold'),width=23,height=10,command=add)
+add.pack()
+
 #Frame and button for clearing selection
-clear_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=10,relief='sunken',bg='grey')
-clear_button_frame.pack(side=RIGHT)
-clear = Button(clear_button_frame,text="CLEAR SELECTION",font=('Arial',15,'bold'),width=15,height=10,command=clear)
+clear_button_frame = Frame(bottom_frame,width=w,height=1,bd=8,relief='sunken',bg='grey')
+clear_button_frame.pack(side=LEFT)
+clear = Button(clear_button_frame,text="CLEAR SELECTION",font=('Arial',15,'bold'),width=23,height=10,command=clear)
 clear.pack()
 
-
-#Frame and button for adding items
-add_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=10,relief='sunken',bg='grey')
-add_button_frame.pack(side=LEFT)
-add = Button(add_button_frame,text="ADD",font=('Arial',15,'bold'),width=15,height=10,command=add)
+#Frame and button for kitchen
+add_button_frame = Frame(bottom_frame,width=w/4,height=1,bd=8,relief='sunken',bg='grey')
+add_button_frame.pack(side=RIGHT)
+add = Button(add_button_frame,text="KITCHEN",font=('Arial',15,'bold'),width=23,height=10,command=kitchen)
 add.pack()
 
 table = StringVar(root)

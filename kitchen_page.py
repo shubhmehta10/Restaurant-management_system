@@ -46,6 +46,9 @@ def cancel():
 def home():
     os.system('python home_page.py')
 
+def checkout():
+    os.system('python checkout_page.py')
+
 tab_n = [1, 2, 3, 4]
 root = Tk()
 root.title("KITCHEN")
@@ -61,7 +64,7 @@ root.resizable(0, 0)
 title = Frame(root, width=w, bd=15, height=170, relief='ridge', bg='grey')
 title.pack(side=TOP)
 title.pack_propagate(0)
-title_label = Label(title, font=('Algerian', 60, 'bold'), bg='grey', text="KITCHEN", justify=CENTER)
+title_label = Label(title, font=('Algerian', 60, 'bold'), bg='white', text="KITCHEN", justify=CENTER)
 title_label.pack(pady=20)
 
 # Left Partition
@@ -113,25 +116,31 @@ right_frame.pack_propagate(0)
 
 # Done Button GUI
 done_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
-done_button_frame.pack(side=TOP, pady=50)
+done_button_frame.pack(side=TOP, pady=22)
 done = Button(done_button_frame, text="DONE", width=20, height=1, font=('Arial', 20, 'bold'), command=confirm)
 done.pack()
 
 # Refresh Button GUI
 refresh_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
-refresh_button_frame.pack(side=TOP, pady=30)
+refresh_button_frame.pack(side=TOP, pady=23)
 refresh_button = Button(refresh_button_frame, text="REFRESH", width=20, height=1, font=('Arial', 20, 'bold'),command=refresh)
 refresh_button.pack()
 
 # Home Button GUI
 home_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
-home_button_frame.pack(side=BOTTOM, pady=50)
+home_button_frame.pack(side=BOTTOM, pady=22)
 home_button = Button(home_button_frame, text="HOME", width=20, height=1, font=('Arial', 20, 'bold'),command=home)
 home_button.pack()
 
 # Cancel Button GUI
+checkout_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
+checkout_button_frame.pack(side=BOTTOM, pady=22)
+checkout_button = Button(checkout_button_frame, text="CHECKOUT", width=20, height=1, font=('Arial', 20, 'bold'),command=checkout)
+checkout_button.pack()
+
+# Cancel Button GUI
 cancel_button_frame = Frame(right_frame, width=w / 4, height=1, bd=10, relief='sunken', bg='grey')
-cancel_button_frame.pack(side=BOTTOM, pady=20)
+cancel_button_frame.pack(side=TOP, pady=22)
 cancel_button = Button(cancel_button_frame, text="CANCEL ORDER", width=20, height=1, font=('Arial', 20, 'bold'),command=cancel)
 cancel_button.pack()
 
